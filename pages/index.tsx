@@ -3,7 +3,9 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import type { GetStaticProps, NextPage } from 'next'
-import type { Character, GetCharacterResults } from '../types/';
+import type { Character, GetCharacterResults } from '../types';
+import imageLoader from '../imageLoader'
+// import CharacterPage from './characters/[id]';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +22,8 @@ const Home: NextPage <{ characters: Character[] }> = ({characters}) => {
         return <div key={character.id}>{character.name}
         
         <Image
+        loader={imageLoader}
+        unoptimized
         src={character.image}
         alt={character.name}
         width={200}
@@ -34,7 +38,7 @@ const Home: NextPage <{ characters: Character[] }> = ({characters}) => {
 
 export default Home;
 
-export const getStaticProps = async (context) => {
+export const getStaticProps = async () => {
   const res = await fetch("https://rickandmortyapi.com/api/character")
   const { results }: GetCharacterResults = await res.json()
 
