@@ -3,12 +3,13 @@ import Image from "next/image";
 import imageLoader from "../../imageLoader";
 import { useRouter } from "next/router";
 import { Character } from "../../types";
-import { GetStaticProps } from "next";
-import { GetStaticPaths } from "next";
+import { GetServerSideProps } from "next";
 
 
 function CharacterPage({character}: { character: Character }) {
-    
+    const router = useRouter();
+
+    console.log(router.query);
     return (
     <div>
         <h1>{character.name}</h1>
@@ -23,23 +24,13 @@ height={200}
 />
 </div>
 );
-    }
-
-// Create static Website 
-export async function getStaticPaths(){
-const res = await fetch("https://rickandmortyapi.com/api/character")
-const { results }: GetCharacterResults = await res.json()
-
-return {
-    paths: results.map((character) => {
-        return {params:{ id: String(character.id )} };
-}),
-
-};
 }
 
-export async function getStaticProps({params}: {params:{id:string} }) {
-    const res = await fetch(`https://rickandmortyapi.com/api/character/${params.id}`
+
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const res = await fetch(
+        `https://rickandmortyapi.com/api/character/${context.query.id}`
     );
     const character = await res.json();
     return {
