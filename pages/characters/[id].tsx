@@ -4,6 +4,9 @@ import imageLoader from "../../imageLoader";
 import { useRouter } from "next/router";
 import { Character } from "../../types";
 import { GetServerSideProps } from "next";
+import Layout from "../../components/Layout";
+import styles from "../../styles/Character.module.css";
+
 
 
 function CharacterPage({character}: { character: Character }) {
@@ -11,7 +14,7 @@ function CharacterPage({character}: { character: Character }) {
 
     console.log(router.query);
     return (
-    <div>
+    <div className={styles.container}>
         <h1>{character.name}</h1>
 
 <Image 
@@ -26,6 +29,9 @@ height={200}
 );
 }
 
+CharacterPage.getLayout = function getLayout(page: typeof CharacterPage) {
+    return <Layout>{page}</Layout>;
+};
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -36,8 +42,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
         props : {
             character,
-    },
-};
+         },
+    };
 
 };
 
